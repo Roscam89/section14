@@ -57,16 +57,16 @@ Car.prototype.accelerate = function () {
 };
 Car.prototype.brake = function () {
   this.speed -= 5;
-  // console.log(`${this.make} going at ${this.speed} km/h`);
+  console.log(`${this.make} going at ${this.speed} km/h`);
 };
 
 bmw.accelerate();
 bmw.accelerate();
 bmw.accelerate();
-bmw.brake();
+//bmw.brake();
 mercedes.accelerate();
 mercedes.accelerate();
-mercedes.brake();
+//mercedes.brake();
 mercedes.accelerate();
 
 //=====Classes=====//
@@ -164,11 +164,11 @@ class CarCl {
 
   accelerate() {
     this.speed = this.speed + 10;
-    console.log(`${this.make} going at ${this.speedUS} mi/h`);
+    // console.log(`${this.make} going at ${this.speedUS} mi/h`);
   }
   brake() {
     this.speed -= 5;
-    console.log(`${this.make} going at ${this.speedUS} mi/h`);
+    //console.log(`${this.make} going at ${this.speedUS} mi/h`);
   }
   get speedUS() {
     return this.speed / 1.6;
@@ -186,6 +186,70 @@ ford.accelerate();
 ford.accelerate();
 ford.accelerate();
 ford.brake();
-console.log(ford);
+ford.brake();
+ford.accelerate();
+//console.log(ford);
 
 //console.log(ford.speedUS);
+
+//=====================Inheritance between "Classes", using constructor functions=======//
+
+const Student = function (firstName, birthYear, course) {
+  Person.call(this, firstName, birthYear);
+  this.course = course;
+};
+
+//Linking prototypes//
+
+Student.prototype = Object.create(Person.prototype);
+Student.prototype.introduce = function () {
+  console.log(`My name is ${this.firstName} and I study ${this.course} `);
+};
+
+const mike = new Student('Michael', 2001, 'Computer Science');
+//mike.introduce();
+//mike.calcAge();
+
+//=====Challenge==//
+
+const EV = function (make, speed, charge) {
+  Car.call(this, make, speed);
+  this.charge = charge;
+};
+EV.prototype = Object.create(Car.prototype);
+
+EV.prototype.chargeBattery = function (chargeTo) {
+  this.charge = chargeTo;
+};
+EV.prototype.accelerate = function () {
+  this.speed += 20;
+  this.charge--;
+  // console.log(`
+  // ${this.make} going at ${this.speed} km/h with a charge of ${this.charge}%`);
+};
+
+const tesla = new EV('Tesla', 120, 23);
+tesla.chargeBattery(90);
+tesla.accelerate();
+//tesla.brake();
+tesla.accelerate();
+//tesla.brake();
+tesla.accelerate();
+
+//console.log(tesla);
+
+//===Inheritance between "Classes", using ES6 classes==//
+
+class StudentCl extends PersonCl {
+  constructor(fullName, birthYear, course) {
+    super(fullName, birthYear);
+    this.course = course;
+  }
+  introduce() {
+    console.log(`My name is ${this.fullName} and i study ${this.course}`);
+  }
+}
+
+const martha = new StudentCl('Martha Jones', 2002, 'Computer science');
+martha.introduce();
+martha.calcAge();
