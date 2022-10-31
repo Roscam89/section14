@@ -251,5 +251,66 @@ class StudentCl extends PersonCl {
 }
 
 const martha = new StudentCl('Martha Jones', 2002, 'Computer science');
-martha.introduce();
-martha.calcAge();
+//martha.introduce();
+//martha.calcAge();
+
+//=============Inheritance between "Classes", Object.create()==//
+
+const StudentProto = Object.create(PersonProto);
+StudentProto.init = function (firstName, birthYear, course) {
+  PersonProto.init.call(this, firstName, birthYear);
+  this.course = course;
+};
+
+StudentProto.introduce = function () {
+  console.log(`My name is ${this.firstName} and i study ${this.course}`);
+};
+
+const jay = Object.create(StudentProto);
+jay.init('Jaycob', 1999, 'Computer Science');
+//jay.introduce();
+//jay.calcAge();
+
+//=====class ex====//
+
+class Account {
+  //public fields
+  locale = navigator.language;
+  //private fields
+  #pin;
+  #movements;
+  constructor(owner, currency, pin) {
+    this.owner = owner;
+    this.currency = currency;
+    this.#pin = pin;
+    this.#movements = [];
+  }
+
+  getMovement() {
+    return this.#movements;
+  }
+
+  deposit(val) {
+    this.#movements.push(val);
+  }
+  withdraw(val) {
+    this.deposit(-val);
+  }
+  //private method
+  #approveLoan() {
+    return true;
+  }
+
+  requestLoan(val) {
+    if (this.#approveLoan) {
+      this.deposit(val);
+    }
+  }
+}
+
+const acc1 = new Account('Maxim', 'USD', 2846);
+acc1.deposit(200);
+acc1.withdraw(260);
+
+acc1.requestLoan(1000);
+console.log(acc1);
