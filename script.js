@@ -168,7 +168,8 @@ class CarCl {
   }
   brake() {
     this.speed -= 5;
-    //console.log(`${this.make} going at ${this.speedUS} mi/h`);
+    console.log(`${this.make} going at ${this.speed} km/h`);
+    return this;
   }
   get speedUS() {
     return this.speed / 1.6;
@@ -180,14 +181,14 @@ class CarCl {
   }
 }
 
-const ford = new CarCl('Ford', 120);
+//const ford = new CarCl('Ford', 120);
 
-ford.accelerate();
-ford.accelerate();
-ford.accelerate();
-ford.brake();
-ford.brake();
-ford.accelerate();
+// // ford.accelerate();
+// ford.accelerate();
+// ford.accelerate();
+// ford.brake();
+// ford.brake();
+// ford.accelerate();
 //console.log(ford);
 
 //console.log(ford.speedUS);
@@ -292,9 +293,11 @@ class Account {
 
   deposit(val) {
     this.#movements.push(val);
+    return this;
   }
   withdraw(val) {
     this.deposit(-val);
+    return this;
   }
   //private method
   #approveLoan() {
@@ -304,6 +307,7 @@ class Account {
   requestLoan(val) {
     if (this.#approveLoan) {
       this.deposit(val);
+      return this;
     }
   }
 }
@@ -313,4 +317,49 @@ acc1.deposit(200);
 acc1.withdraw(260);
 
 acc1.requestLoan(1000);
-console.log(acc1);
+//====Chaining======= //
+acc1
+  .deposit(1000)
+  .deposit(1000)
+  .withdraw(200)
+  .requestLoan(10000)
+  .withdraw(1000)
+  .deposit(2000);
+//console.log(acc1);
+
+class EVCL extends CarCl {
+  #charge;
+  constructor(make, speed, charge) {
+    super(make, speed);
+    this.#charge = charge;
+  }
+
+  accelerate() {
+    this.speed += 20;
+    this.#charge--;
+    console.log(`
+     ${this.make} going at ${this.speed} km/h with a charge of ${
+      this.#charge
+    }%`);
+    return this;
+  }
+  chargeBattery(chargeTo) {
+    this.#charge = chargeTo;
+    return this;
+  }
+  // brake() {
+  //  this.speed -= 5;
+  // this.#charge++;
+  // console.log(
+  //   `${this.make} going at ${this.speed} km/h with a charge of ${
+  //    this.#charge
+  //   }%`
+  //  );
+  //  return this;
+  // }
+}
+
+const rivian = new EVCL('Rivian', 120, 23);
+
+rivian.accelerate().brake().chargeBattery(33).accelerate().brake();
+console.log(rivian);
